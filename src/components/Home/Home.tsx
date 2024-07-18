@@ -16,7 +16,7 @@ const Home = () => {
   return (
     <div
       id="Home"
-      className="Home grid grid-cols-1 md:grid-cols-6 gap-4 place-items-center p-4"
+      className="grid grid-cols-1 md:grid-cols-6 gap-4 place-items-center p-4"
     >
       <motion.div
         initial={{ x: -10, opacity: 0 }}
@@ -71,16 +71,16 @@ const Home = () => {
           target="_blank"
           href={"https://www.instagram.com/pranaydhanke33/"}
         >
-          <FaSquareInstagram className="text-2xl cursor-pointer" />
+          <FaSquareInstagram  className="text-2xl hover:bg-red-600 rounded-md cursor-pointer" />
         </Link>
-        <Link href={"https://twitter.com/pranaydhanke33?t=hrHjKL9cuivSUcV424V8ew&s=08"} target="_blank">
-          <FaSquareXTwitter className="text-2xl cursor-pointer" />
+        <Link   href={"https://twitter.com/pranaydhanke33?t=hrHjKL9cuivSUcV424V8ew&s=08"} target="_blank">
+          <FaSquareXTwitter className="text-2xl cursor-pointer hover:bg-black rounded-md" />
         </Link>
         <Link href={"https://in.linkedin.com/in/pranay-dhanke-176a66263"} target="_blank">
-          <FaLinkedin className="text-2xl cursor-pointer" />
+          <FaLinkedin className="text-2xl cursor-pointer hover:bg-blue-600 rounded-md" />
         </Link>
         <Link href={"https://github.com/PranayDhanke"} target="_blank">
-          <FaGithubSquare className="text-2xl cursor-pointer" />
+          <FaGithubSquare className="text-2xl cursor-pointer hover:bg-gray-800 rounded-md" />
         </Link>
       </motion.div>
     </div>

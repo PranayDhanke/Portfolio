@@ -2,7 +2,11 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import { motion, useScroll } from "framer-motion";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaHome, FaTimes } from "react-icons/fa";
+import { toast, ToastContainer } from "react-toastify";
+import { IoIosHelpCircleOutline } from "react-icons/io";
+import { IoCodeWorkingOutline } from "react-icons/io5";
+import { CgProfile } from "react-icons/cg";
 
 const Navbar = () => {
   const { scrollYProgress } = useScroll();
@@ -12,8 +16,13 @@ const Navbar = () => {
     setIsOpen(!isOpen);
   };
 
+  const handledoenload = () => {
+    toast.info("Nothing yet")
+  };
+
   return (
     <div className="z-10 sticky bg-white shadow-md inset-0">
+      <ToastContainer />
       <motion.div
         style={{ scaleX: scrollYProgress }}
         className="p-[2px] bg-pri-100"
@@ -30,7 +39,7 @@ const Navbar = () => {
         <div className="hidden md:flex justify-between gap-5">
           <ul className="flex gap-5">
             <li className="cursor-pointer font-semibold">
-              <Link href="#Home" scroll={false}>Home</Link>
+              <Link href="#Home">Home</Link>
             </li>
             <li className="cursor-pointer font-semibold">
               <Link href="#About">About</Link>
@@ -44,7 +53,10 @@ const Navbar = () => {
           </ul>
         </div>
         <div className="hidden md:flex">
-          <button className="border-2 p-2 text-sm rounded-md border-pri-100">
+          <button
+            onClick={handledoenload}
+            className="border-2 p-2 text-sm rounded-md border-pri-100"
+          >
             Download CV
           </button>
         </div>
@@ -55,23 +67,39 @@ const Navbar = () => {
         </div>
       </motion.div>
       {isOpen && (
-        <div className="md:hidden bg-blue-100 px-6 py-4 text-center ">
+        <div
+          className={`fixed   top-0 left-0 h-screen max-w-72 bg-white p-5 shadow-xl transform ${
+            isOpen ? "translate-x-0" : "-translate-x-full"
+          } transition-transform duration-300 ease-in-out z-50 w-full`}
+        >
           <ul className="flex flex-col gap-4">
-            <li className="cursor-pointer font-semibold">
-              <Link href="#Home" scroll={false} onClick={toggleMenu}>Home</Link>
-            </li>
-            <li className="cursor-pointer font-semibold">
-              <Link href="#About" onClick={toggleMenu}>About</Link>
-            </li>
-            <li className="cursor-pointer font-semibold">
-              <Link href="#Work" onClick={toggleMenu}>Works</Link>
-            </li>
-            <li className="cursor-pointer font-semibold">
-              <Link href="#Contact" onClick={toggleMenu}>Contact</Link>
-            </li>
+            <h1 className="font-bold text-xl">Menu</h1>
+
+            <Link className="liststyle" href="#Home" onClick={toggleMenu}>
+              <FaHome />
+              <span>Home</span>
+            </Link>
+
+            <Link className="liststyle" href="#About" onClick={toggleMenu}>
+              <CgProfile />
+              <span>About</span>
+            </Link>
+
+            <Link className="liststyle" href="#Work" onClick={toggleMenu}>
+              <IoCodeWorkingOutline />
+              <span>Works</span>
+            </Link>
+
+            <Link className="liststyle" href="#Contact" onClick={toggleMenu}>
+              <IoIosHelpCircleOutline className="" />
+              Contact
+            </Link>
           </ul>
           <div className="mt-4">
-            <button className="border-2 p-2 w-full text-sm rounded-md border-pri-100">
+            <button
+              onClick={handledoenload}
+              className="border-2 p-2 w-full text-sm rounded-md border-pri-100"
+            >
               Download CV
             </button>
           </div>
