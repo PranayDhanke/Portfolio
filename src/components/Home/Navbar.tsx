@@ -17,9 +17,10 @@ const Navbar = () => {
   };
 
   const handledoenload = () => {
-    toast.info("Nothing yet")
+    toast.info("Nothing yet");
   };
 
+  
   return (
     <div className="z-10 sticky bg-white shadow-md inset-0">
       <ToastContainer />
@@ -38,26 +39,32 @@ const Navbar = () => {
         </div>
         <div className="hidden md:flex justify-between gap-5">
           <ul className="flex gap-5">
-            <li className="cursor-pointer font-semibold">
+            <li className="group cursor-pointer relative font-semibold ">
               <Link href="#Home">Home</Link>
+              <span className="absolute -bottom-0 left-0 w-0 transition-all h-0.5 bg-indigo-600 group-hover:w-full"></span>
             </li>
-            <li className="cursor-pointer font-semibold">
+            <li className="group relative cursor-pointer font-semibold">
               <Link href="#About">About</Link>
+              <span className="absolute -bottom-0 left-0 w-0 transition-all h-0.5 bg-indigo-600 group-hover:w-full"></span>
             </li>
-            <li className="cursor-pointer font-semibold">
+            <li className=" group relative cursor-pointer font-semibold">
               <Link href="#Work">Works</Link>
+              <span className="absolute -bottom-0 left-0 w-0 transition-all h-0.5 bg-indigo-600 group-hover:w-full"></span>
             </li>
-            <li className="cursor-pointer font-semibold">
+            <li className=" group relative cursor-pointer font-semibold">
               <Link href="#Contact">Contact</Link>
+              <span className="absolute -bottom-1 left-0 w-0 transition-all h-0.5 bg-indigo-600 group-hover:w-full"></span>
             </li>
           </ul>
         </div>
         <div className="hidden md:flex">
           <button
             onClick={handledoenload}
-            className="border-2 p-2 text-sm rounded-md border-pri-100"
+            className="relative inline-block font-medium group py-1.5 px-2.5 "
           >
-            Download CV
+            <span className="absolute inset-0 w-full h-full transition duration-400 ease-out transform translate-x-1 translate-y-1 bg-green-200 group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
+            <span className="absolute inset-0 w-full h-full bg-white border border-green-200 group-hover:bg-green-50"></span>
+            <span className="relative text-green-600 ">Download CV</span>
           </button>
         </div>
         <div className="md:hidden flex items-center">

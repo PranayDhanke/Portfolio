@@ -6,7 +6,7 @@ import luffy from "@/images/home/51rayl0HnRL._AC_UF1000,1000_QL80_.jpg";
 
 const About = () => {
   return (
-    <div className="About mt-20" id="About">
+    <div className="About pt-6 relative backdrop-blur-sm" id="About">
       <h1 className="font-bold underline underline-offset-8 text-center text-4xl">
         {"<About Me/>"}
       </h1>

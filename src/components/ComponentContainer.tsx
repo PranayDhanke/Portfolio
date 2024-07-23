@@ -9,7 +9,7 @@ import { ToastContainer } from "react-toastify";
 
 const ComponentContainer = () => {
   return (
-    <div>
+    <div >
       <ToastContainer />
       <Navbar />
       <Home />
