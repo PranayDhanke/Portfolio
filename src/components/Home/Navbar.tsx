@@ -1,119 +1,183 @@
 "use client";
+
+import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
-import React, { useState } from "react";
 import { motion, useScroll } from "framer-motion";
-import { FaBars, FaHome, FaTimes } from "react-icons/fa";
-import { toast, ToastContainer } from "react-toastify";
+import { FaBars, FaTimes, FaHome } from "react-icons/fa";
+import { CgProfile } from "react-icons/cg";
 import { IoIosHelpCircleOutline } from "react-icons/io";
 import { IoCodeWorkingOutline } from "react-icons/io5";
-import { CgProfile } from "react-icons/cg";
 
-const Navbar = () => {
+// -----------------------------
+// Replace this with your real resume URL or pass as a prop
+const RESUME_URL = "/resume.pdf"; // <-- change this to your actual CV path
+// -----------------------------
+
+export default function Navbar() {
   const { scrollYProgress } = useScroll();
   const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
+  const links = [
+    { href: "#Home", label: "Home", icon: <FaHome /> },
+    { href: "#About", label: "About", icon: <CgProfile /> },
+    { href: "#Work", label: "Works", icon: <IoCodeWorkingOutline /> },
+    { href: "#Contact", label: "Contact", icon: <IoIosHelpCircleOutline /> },
+  ];
 
-  const handledoenload = () => {
-    toast.info("Nothing yet");
-  };
+  useEffect(() => {
+    // lock scroll when menu is open
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
-  
+  useEffect(() => {
+    // close on Escape
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  // close when clicking outside mobile menu (for a11y)
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (!isOpen) return;
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, [isOpen]);
+
   return (
-    <div className="z-10 sticky bg-white shadow-md inset-0">
-      <ToastContainer />
+    <header className="sticky overflow-hidden top-0 z-50 bg-white/90 backdrop-blur-sm shadow-sm">
+      {/* thin progress bar driven by scroll */}
       <motion.div
         style={{ scaleX: scrollYProgress }}
-        className="p-[2px] bg-pri-100"
-      ></motion.div>
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        className="flex justify-between items-center py-4 px-6 md:px-12"
-      >
-        <div>
-          <h1 className="text-2xl text-pri-100 font-bold">PRANAY</h1>
-        </div>
-        <div className="hidden md:flex justify-between gap-5">
-          <ul className="flex gap-5">
-            <li className="group cursor-pointer relative font-semibold ">
-              <Link href="#Home">Home</Link>
-              <span className="absolute -bottom-0 left-0 w-0 transition-all h-0.5 bg-indigo-600 group-hover:w-full"></span>
-            </li>
-            <li className="group relative cursor-pointer font-semibold">
-              <Link href="#About">About</Link>
-              <span className="absolute -bottom-0 left-0 w-0 transition-all h-0.5 bg-indigo-600 group-hover:w-full"></span>
-            </li>
-            <li className=" group relative cursor-pointer font-semibold">
-              <Link href="#Work">Works</Link>
-              <span className="absolute -bottom-0 left-0 w-0 transition-all h-0.5 bg-indigo-600 group-hover:w-full"></span>
-            </li>
-            <li className=" group relative cursor-pointer font-semibold">
-              <Link href="#Contact">Contact</Link>
-              <span className="absolute -bottom-1 left-0 w-0 transition-all h-0.5 bg-indigo-600 group-hover:w-full"></span>
-            </li>
-          </ul>
-        </div>
-        <div className="hidden md:flex">
-          <button
-            onClick={handledoenload}
-            className="relative inline-block font-medium group py-1.5 px-2.5 "
-          >
-            <span className="absolute inset-0 w-full h-full transition duration-400 ease-out transform translate-x-1 translate-y-1 bg-green-200 group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
-            <span className="absolute inset-0 w-full h-full bg-white border border-green-200 group-hover:bg-green-50"></span>
-            <span className="relative text-green-600 ">Download CV</span>
-          </button>
-        </div>
-        <div className="md:hidden flex items-center">
-          <button onClick={toggleMenu} className="text-2xl">
-            {isOpen ? <FaTimes /> : <FaBars />}
-          </button>
-        </div>
-      </motion.div>
-      {isOpen && (
-        <div
-          className={`fixed   top-0 left-0 h-screen max-w-72 bg-white p-5 shadow-xl transform ${
-            isOpen ? "translate-x-0" : "-translate-x-full"
-          } transition-transform duration-300 ease-in-out z-50 w-full`}
-        >
-          <ul className="flex flex-col gap-4">
-            <h1 className="font-bold text-xl">Menu</h1>
+        className="origin-left h-1 bg-gradient-to-r from-sky-500 to-indigo-600"
+      />
 
-            <Link className="liststyle" href="#Home" onClick={toggleMenu}>
-              <FaHome />
-              <span>Home</span>
-            </Link>
+      <nav className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          {/* Brand / Logo */}
+          <div className="flex items-center gap-3">
+            <div className="rounded-full bg-gradient-to-br from-indigo-500 to-pink-500 w-10 h-10 flex items-center justify-center text-white font-bold">P</div>
+            <div>
+              <Link href="#Home" className="text-xl font-extrabold tracking-tight text-gray-800">
+                PRANAY
+              </Link>
+              <p className="text-xs text-gray-500 -mt-0.5">Frontend • Next.js • ML</p>
+            </div>
+          </div>
 
-            <Link className="liststyle" href="#About" onClick={toggleMenu}>
-              <CgProfile />
-              <span>About</span>
-            </Link>
+          {/* Desktop links */}
+          <div className="hidden md:flex md:items-center md:gap-8">
+            <ul className="flex gap-6 items-center">
+              {links.map((l) => (
+                <li key={l.href} className="relative group">
+                  <Link
+                    href={l.href}
+                    className="inline-flex items-center gap-2 text-gray-700 font-medium py-2 px-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300"
+                  >
+                    {l.icon}
+                    <span className="whitespace-nowrap">{l.label}</span>
+                    {/* animated underline */}
+                    <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-indigo-600 transition-all group-hover:w-full" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
 
-            <Link className="liststyle" href="#Work" onClick={toggleMenu}>
-              <IoCodeWorkingOutline />
-              <span>Works</span>
-            </Link>
-
-            <Link className="liststyle" href="#Contact" onClick={toggleMenu}>
-              <IoIosHelpCircleOutline className="" />
-              Contact
-            </Link>
-          </ul>
-          <div className="mt-4">
-            <button
-              onClick={handledoenload}
-              className="border-2 p-2 w-full text-sm rounded-md border-pri-100"
+            <a
+              href={RESUME_URL}
+              download
+              className="ml-4 inline-flex items-center rounded-lg border border-indigo-100 px-3 py-1.5 text-sm font-medium shadow-sm bg-white hover:bg-indigo-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300"
+              aria-label="Download CV"
             >
               Download CV
+            </a>
+          </div>
+
+          {/* Mobile toggle */}
+          <div className="md:hidden flex items-center">
+            <button
+              aria-expanded={isOpen}
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              onClick={() => setIsOpen((s) => !s)}
+              className="p-2 rounded-md inline-flex items-center justify-center text-gray-700 hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300"
+            >
+              {isOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
             </button>
           </div>
         </div>
-      )}
-    </div>
-  );
-};
+      </nav>
 
-export default Navbar;
+      {/* Mobile menu + backdrop */}
+      <motion.div
+        initial={false}
+        animate={{ opacity: isOpen ? 1 : 0, pointerEvents: isOpen ? "auto" : "none" }}
+        className="fixed inset-0 z-40"
+        aria-hidden={!isOpen}
+      >
+        {/* backdrop */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isOpen ? 0.45 : 0 }}
+          transition={{ duration: 0.18 }}
+          className="absolute inset-0 bg-black"
+        />
+
+        {/* sliding panel */}
+        <motion.aside
+          ref={menuRef}
+          initial={{ x: "100%" }}
+          animate={{ x: isOpen ? "0%" : "100%" }}
+          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          className="absolute right-0 top-0 w-full max-w-xs h-full bg-white shadow-2xl p-6 overflow-auto"
+          role="dialog"
+          aria-modal="true"
+        >
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h3 className="text-lg font-semibold">Menu</h3>
+              <p className="text-sm text-gray-500">Quick links & actions</p>
+            </div>
+            <button onClick={() => setIsOpen(false)} className="p-2 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300">
+              <FaTimes />
+            </button>
+          </div>
+
+          <nav className="flex flex-col gap-4">
+            {links.map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300"
+              >
+                <span className="text-lg text-indigo-600">{l.icon}</span>
+                <span className="font-medium text-gray-700">{l.label}</span>
+              </Link>
+            ))}
+
+            <a
+              href={RESUME_URL}
+              download
+              onClick={() => setIsOpen(false)}
+              className="mt-4 inline-flex items-center justify-center w-full rounded-md border border-indigo-100 px-3 py-2 text-sm font-medium bg-white"
+            >
+              Download CV
+            </a>
+          </nav>
+
+          <div className="mt-6 text-xs text-gray-400">Tip: press Escape to close the menu.</div>
+        </motion.aside>
+      </motion.div>
+    </header>
+  );
+}
