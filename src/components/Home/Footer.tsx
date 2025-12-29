@@ -1,10 +1,18 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { FaGithub, FaLinkedinIn, FaInstagram, FaTwitter } from "react-icons/fa"; // Updated icons for better alignment
+import {
+  FaGithub,
+  FaLinkedin,
+  FaInstagram,
+  FaTwitter,
+  FaEnvelope,
+  FaArrowUp,
+} from "react-icons/fa";
 
-// Define quick links for navigation
+/* Navigation */
 const navLinks = [
   { href: "#Home", label: "Home" },
   { href: "#About", label: "About" },
@@ -12,82 +20,159 @@ const navLinks = [
   { href: "#Contact", label: "Contact" },
 ];
 
-// Define social media links with a dedicated style
+/* Social Links */
 const socialLinks = [
-  { href: "https://www.instagram.com/pranaydhanke33/", icon: FaInstagram, color: "hover:text-pink-500", ariaLabel: "Instagram" },
-  { href: "https://twitter.com/pranaydhanke33?t=hrHjKL9cuivSUcV424V8ew&s=08", icon: FaTwitter, color: "hover:text-sky-500", ariaLabel: "Twitter" },
-  { href: "https://in.linkedin.com/in/pranay-dhanke-176a66263", icon: FaLinkedinIn, color: "hover:text-blue-600", ariaLabel: "LinkedIn" },
-  { href: "https://github.com/PranayDhanke", icon: FaGithub, color: "hover:text-gray-400", ariaLabel: "GitHub" },
+  {
+    href: "https://github.com/PranayDhanke",
+    icon: FaGithub,
+    label: "GitHub",
+  },
+  {
+    href: "https://in.linkedin.com/in/pranay-dhanke-176a66263",
+    icon: FaLinkedin,
+    label: "LinkedIn",
+  },
+  {
+    href: "https://twitter.com/pranaydhanke33",
+    icon: FaTwitter,
+    label: "Twitter",
+  },
+  {
+    href: "https://www.instagram.com/pranaydhanke33/",
+    icon: FaInstagram,
+    label: "Instagram",
+  },
 ];
 
-const Footer = () => {
+export default function Footer() {
   const currentYear = new Date().getFullYear();
 
+  const scrollToTop = () =>
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
   return (
-    <footer className="w-full bg-gray-900 text-white pt-12 pb-6">
-      <div className="max-w-7xl mx-auto px-6">
-        
-        {/* Main Footer Content */}
-        <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-8 border-b border-gray-700 pb-8">
-          
-          {/* Brand/Thank You */}
-          <div className="text-center md:text-left">
-            <h3 className="text-3xl font-extrabold text-indigo-400">PRANAY</h3>
-            <p className="mt-2 text-gray-400 max-w-xs">
-              Thank you for stopping by! Lets connect and build something amazing together.
-            </p>
-          </div>
-          
-          {/* Quick Links */}
+    <footer
+      className="relative overflow-hidden
+                 bg-gradient-to-b from-slate-50 to-white
+                 dark:from-gray-950 dark:to-gray-900
+                 border-t border-slate-200 dark:border-gray-800"
+    >
+      {/* Soft background glow */}
+      <div className="pointer-events-none absolute -left-1/4 top-0 h-[35rem] w-[35rem] bg-indigo-100/30 dark:bg-indigo-900/10 blur-[120px]" />
+      <div className="pointer-events-none absolute -right-1/4 bottom-0 h-[35rem] w-[35rem] bg-purple-100/30 dark:bg-purple-900/10 blur-[120px]" />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 py-16">
+        {/* Top Section */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+          {/* Brand */}
           <div>
-            <h4 className="text-lg font-semibold mb-3 text-indigo-400">Quick Links</h4>
-            <ul className="flex flex-wrap justify-center md:flex-col gap-x-4 gap-y-1 text-gray-400">
+            <h3 className="text-3xl font-extrabold text-slate-800 dark:text-white">
+              PRANAY
+            </h3>
+            <p className="mt-3 text-sm text-slate-600 dark:text-gray-400 max-w-sm">
+              Full-stack developer focused on building clean, scalable, and
+              production-ready web applications.
+            </p>
+
+            <a
+              href="mailto:pranaydhanke33@gmail.com"
+              className="inline-flex items-center gap-2 mt-5
+                         px-4 py-2 rounded-lg
+                         bg-indigo-50 text-indigo-600
+                         dark:bg-indigo-950/40 dark:text-indigo-400
+                         border border-indigo-200 dark:border-indigo-800/40
+                         hover:bg-indigo-100 dark:hover:bg-indigo-950/60
+                         transition"
+            >
+              <FaEnvelope />
+              <span className="text-sm font-medium">Get in touch</span>
+            </a>
+          </div>
+
+          {/* Navigation */}
+          <div>
+            <h4 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">
+              Navigation
+            </h4>
+            <ul className="space-y-2">
               {navLinks.map((link) => (
-                <li key={link.href} className="hover:text-white transition duration-200">
-                  <Link href={link.href}>{link.label}</Link>
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-slate-600 dark:text-gray-400
+                               hover:text-indigo-600 dark:hover:text-indigo-400
+                               transition"
+                  >
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Social Links */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{
-              opacity: 1,
-              x: 0,
-              transition: { type: "spring", duration: 0.5, bounce: 0.5 },
-            }}
-            viewport={{ once: true }}
-            className="flex flex-col items-center md:items-start"
-          >
-            <h4 className="text-lg font-semibold mb-3 text-indigo-400">Connect With Me</h4>
-            <div className="flex gap-5 text-2xl">
-              {socialLinks.map((social) => (
-                <Link
-                  key={social.ariaLabel}
-                  target="_blank"
-                  href={social.href}
-                  aria-label={social.ariaLabel}
-                  className={`text-gray-400 ${social.color} transition-colors duration-300 transform hover:-translate-y-1`}
-                >
-                  <social.icon />
-                </Link>
-              ))}
+          {/* Social */}
+          <div>
+            <h4 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">
+              Connect
+            </h4>
+            <div className="flex gap-3">
+              {socialLinks.map((social) => {
+                const Icon = social.icon;
+                return (
+                  <motion.a
+                    key={social.label}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={social.label}
+                    whileHover={{ y: -3, scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="p-3 rounded-lg
+                               bg-white dark:bg-gray-900
+                               border border-slate-200 dark:border-gray-800
+                               text-slate-600 dark:text-gray-400
+                               hover:text-indigo-600 dark:hover:text-indigo-400
+                               transition"
+                  >
+                    <Icon />
+                  </motion.a>
+                );
+              })}
             </div>
-          </motion.div>
+          </div>
         </div>
 
-        {/* Copyright */}
-        <div className="pt-6 text-center text-sm text-gray-500">
-          &copy; {currentYear} Pranay Dhanke. All rights reserved. 
-          <span className="block mt-1 md:inline md:ml-4">
-            Built with <Link href="https://nextjs.org/" target="_blank" className="hover:text-indigo-400">Next.js</Link> & <Link href="https://tailwindcss.com/" target="_blank" className="hover:text-indigo-400">Tailwind CSS</Link>.
-          </span>
+        {/* Divider */}
+        <div className="h-px bg-gradient-to-r from-transparent via-slate-300 dark:via-gray-700 to-transparent mb-8" />
+
+        {/* Bottom */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-slate-500 dark:text-gray-400">
+          <p>
+            © {currentYear}{" "}
+            <span className="font-semibold text-slate-700 dark:text-gray-200">
+              Pranay Dhanke
+            </span>
+            . All rights reserved.
+          </p>
+
+          <div className="flex items-center gap-4">
+            <span>Open to internships & full-time roles</span>
+
+            <button
+              onClick={scrollToTop}
+              aria-label="Back to top"
+              className="p-2 rounded-lg
+                         bg-indigo-50 dark:bg-indigo-950/40
+                         border border-indigo-200 dark:border-indigo-800/40
+                         text-indigo-600 dark:text-indigo-400
+                         hover:bg-indigo-100 dark:hover:bg-indigo-950/60
+                         transition"
+            >
+              <FaArrowUp />
+            </button>
+          </div>
         </div>
       </div>
     </footer>
   );
-};
-
-export default Footer;
+}

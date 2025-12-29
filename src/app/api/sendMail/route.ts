@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const nodemailer = require("nodemailer");
 
@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   const { name, email, subject, message } = await req.json();
   try {
     const info = await transporter.sendMail({
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
       { "Message sent: %s": info.messageId },
       { status: 201 }
     );
-  } catch (error) {
+  } catch  {
     return NextResponse.json("Error while send email", { status: 504 });
   }
 }

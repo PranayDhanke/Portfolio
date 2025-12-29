@@ -2,200 +2,208 @@
 
 import Image from "next/image";
 import React from "react";
-// Assuming these are defined in your project path
-import luffy from "@/images/home/luffyt.webp"; 
-import imagebg from "@/images/home/imagebg.png"; 
+import luffy from "@/images/home/IMG20250917134730.jpg";
 import { motion } from "framer-motion";
 import { FaLinkedin, FaInstagram, FaXTwitter } from "react-icons/fa6";
-import { FaGithub } from "react-icons/fa"; // Using FaGithub for consistency with other icons
+import { FaGithub } from "react-icons/fa";
 import Link from "next/link";
 
-const RESUME_URL = "/resume.pdf"; // <- replace with your CV path
+interface Skill {
+  category: string;
+  items: string[];
+}
 
 export default function Home() {
-  // Animation variants for better structure
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
+  const skills: Skill[] = [
+    {
+      category: "Frontend",
+      items: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Shadcn/ui"],
     },
-  };
+    {
+      category: "Backend",
+      items: ["Node.js", "Express", "MongoDB", "Firebase"],
+    },
+    {
+      category: "Tools & Platforms",
+      items: ["Git", "GitHub", "Docker", "Postman"],
+    },
+  ];
 
-  const itemVariants = {
-    hidden: { x: -30, opacity: 0 },
-    visible: { x: 0, opacity: 1, transition: { duration: 0.6, ease: "easeOut" } },
-  };
-
-  const imageVariants = {
-    hidden: { y: 20, opacity: 0, scale: 0.95 },
-    visible: { y: 0, opacity: 1, scale: 1, transition: { duration: 0.7, ease: "easeOut" } },
-  };
+  const socialLinks = [
+    {
+      icon: FaGithub,
+      href: "https://github.com/PranayDhanke",
+      label: "GitHub",
+      color: "hover:text-gray-900 dark:hover:text-white",
+    },
+    {
+      icon: FaLinkedin,
+      href: "https://in.linkedin.com/in/pranay-dhanke-176a66263",
+      label: "LinkedIn",
+      color: "hover:text-blue-600",
+    },
+    {
+      icon: FaXTwitter,
+      href: "https://twitter.com/pranaydhanke33",
+      label: "Twitter/X",
+      color: "hover:text-black dark:hover:text-white",
+    },
+    {
+      icon: FaInstagram,
+      href: "https://www.instagram.com/pranaydhanke33/",
+      label: "Instagram",
+      color: "hover:text-pink-600",
+    },
+  ];
 
   return (
-    // Change background to a subtler gradient for contrast
-    <section 
-      id="Home" 
-      className="relative overflow-hidden bg-white pt-24 pb-24 md:pt-32" 
-      // Ensure smooth scroll target padding
-      style={{ scrollMarginTop: '4rem' }} 
+    <section
+      id="Home"
+      className="relative overflow-hidden bg-gradient-to-b from-slate-50 to-white dark:from-gray-900 dark:to-gray-950 pt-24 pb-28 md:pt-32 md:pb-32"
+      style={{ scrollMarginTop: "4rem" }}
     >
-      {/* Decorative background light source (subtler) */}
-      <div className="pointer-events-none absolute -left-1/4 -top-1/4 h-[50rem] w-[50rem] rounded-full bg-indigo-50/50 blur-[100px]" />
-      <div className="pointer-events-none absolute right-0 top-1/4 h-[40rem] w-[40rem] rounded-full bg-pink-50/50 blur-[100px]" />
+      {/* Background blur */}
+      <div className="pointer-events-none absolute -left-1/4 -top-1/4 h-[45rem] w-[45rem] rounded-full bg-indigo-100/30 dark:bg-indigo-900/10 blur-[120px]" />
+      <div className="pointer-events-none absolute right-0 top-1/3 h-[40rem] w-[40rem] rounded-full bg-purple-100/30 dark:bg-purple-900/10 blur-[120px]" />
 
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
-        
-        {/* Left Content (Text and Buttons) - Order 2 on Mobile, Order 1 on Desktop */}
-        <motion.div
-          className="md:col-span-7 space-y-6 order-2 md:order-1"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {/* Welcome Chip (Improved Contrast) */}
-          <motion.div 
-            className="inline-flex items-center gap-3 bg-indigo-600/10 text-indigo-700 rounded-full px-4 py-1.5 w-max text-sm font-semibold border border-indigo-200"
-            variants={itemVariants}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+          {/* Left Content */}
+          <motion.div
+            className="md:col-span-7 space-y-8 order-2 md:order-1"
+            initial={{ opacity: 0, x: -40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            👋 <span className="text-gray-900">Welcome — nice to meet you</span>
-          </motion.div>
-
-          {/* Heading */}
-          <motion.h1 
-            className="text-4xl sm:text-6xl font-extrabold leading-snug text-gray-900"
-            variants={itemVariants}
-          >
-            I build delightful web experiences
-            <br />
-            <span className="text-indigo-600">with Next.js & Tailwind</span>
-          </motion.h1>
-
-          {/* Paragraph */}
-          <motion.p 
-            className="text-gray-700 max-w-xl text-lg leading-relaxed"
-            variants={itemVariants}
-          >
-            Hi — I&rsquo;m **Pranay Dhanke**. I create fast, accessible, and
-            maintainable front-end apps. I enjoy shipping features that help people and keep
-            performance high.
-          </motion.p>
-
-          {/* Action Buttons */}
-          <motion.div 
-            className="flex flex-wrap items-center gap-4 pt-2"
-            variants={itemVariants}
-          >
-            <Link 
-              href="#Contact" 
-              className="group inline-flex items-center rounded-xl bg-indigo-600 text-white px-6 py-3 font-semibold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition duration-300 focus:outline-none focus-visible:ring-4 focus-visible:ring-indigo-300"
-            >
-              <motion.span whileTap={{ scale: 0.95 }}>Get In Touch</motion.span>
-            </Link>
-
-            <a 
-              href={RESUME_URL} 
-              download 
-              className="inline-flex items-center rounded-xl border border-gray-300 px-6 py-3 text-base font-semibold text-gray-800 bg-white hover:bg-gray-50 transition duration-300 focus:outline-none focus-visible:ring-4 focus-visible:ring-gray-200"
-            >
-              Download CV
-            </a>
-
-            <span className="ml-2 text-sm text-gray-500 hidden md:inline">• Available for freelancing</span>
-          </motion.div>
-          
-          {/* Skill chips */}
-          <motion.div 
-            className="flex flex-wrap gap-2 pt-4"
-            variants={itemVariants}
-          >
-            {/* Added a title for better context */}
-            <span className="text-gray-500 font-medium pt-1">Tech Stack:</span> 
-            {[
-              "Next.js",
-              "React",
-              "Tailwind CSS", // Explicitly added CSS for clarity
-              "TypeScript",
-              "Firebase",
-              "Machine Learning",
-            ].map((skill) => (
-              <div 
-                key={skill} 
-                className="px-3 py-1 rounded-full bg-gray-100 text-sm font-medium text-gray-700 border border-gray-200"
-              >
-                {skill}
-              </div>
-            ))}
-          </motion.div>
-        </motion.div>
-
-        {/* Right Visual (Image, Floating Card, and Mobile Socials) - Order 1 on Mobile, Order 2 on Desktop */}
-        <motion.div
-          className="md:col-span-5 flex flex-col items-center justify-center relative order-1 md:order-2"
-          variants={imageVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <div className="relative w-full max-w-sm">
-            {/* Background Image (Using a geometric shape/design is better than a generic bg) */}
-            <div className="absolute inset-0 -z-10 transform scale-100">
-              <Image 
-                src={imagebg} 
-                alt="Decorative geometric background" 
-                className="w-full h-auto rounded-3xl opacity-80" 
-              />
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200 dark:bg-indigo-950/30 dark:text-indigo-300 dark:border-indigo-800/40">
+              👋 Welcome — nice to meet you
             </div>
 
-            {/* Floating Portrait (Centered over the background) */}
-            <motion.div 
-                whileHover={{ y: -8, transition: { duration: 0.3 } }} 
-                className="relative w-56 h-56 mx-auto -translate-y-4 shadow-2xl rounded-[30px] border-4 border-white transition-shadow"
-            >
-              <Image
-                src={luffy}
-                alt="Pranay Dhanke Portrait"
-                className="rounded-2xl object-cover w-full h-full"
-                priority
-              />
-            </motion.div>
+            {/* Heading */}
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-tight text-slate-800 dark:text-white">
+              I build{" "}
+              <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                scalable web applications
+              </span>
+            </h1>
 
-            {/* Floating Card (Better design and placement) */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.8, type: 'spring', stiffness: 100 }}
-              className="absolute -right-8 bottom-12 hidden md:flex items-center gap-3 bg-white rounded-xl p-3 shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow"
-            >
-              <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-lg">P</div>
-              <div className="text-sm">
-                <div className="font-bold text-gray-900">Pranay Dhanke</div>
-                <div className="text-indigo-600 text-xs font-medium">Front-End Developer</div>
-              </div>
-            </motion.div>
-          </div>
-          
-          {/* Socials - Visible on Mobile, Hidden on Desktop */}
-          <div className="mt-8 pt-4 border-t border-gray-100 w-full flex justify-center md:hidden">
-              <div className="flex gap-6 text-2xl text-gray-500">
-                  <a href="https://www.instagram.com/pranaydhanke33/" target="_blank" rel="noreferrer" aria-label="Instagram" className="p-2 hover:text-pink-600 transition-colors">
-                      <FaInstagram />
-                  </a>
-                  <a href="https://twitter.com/pranaydhanke33" target="_blank" rel="noreferrer" aria-label="Twitter" className="p-2 hover:text-blue-500 transition-colors">
-                      <FaXTwitter />
-                  </a>
-                  <a href="https://in.linkedin.com/in/pranay-dhanke-176a66263" target="_blank" rel="noreferrer" aria-label="LinkedIn" className="p-2 hover:text-blue-700 transition-colors">
-                      <FaLinkedin />
-                  </a>
-                  <a href="https://github.com/PranayDhanke" target="_blank" rel="noreferrer" aria-label="GitHub" className="p-2 hover:text-gray-900 transition-colors">
-                      <FaGithub />
-                  </a>
-              </div>
-          </div>
-        </motion.div>
-        
-  
+            {/* Description */}
+            <p className="text-lg sm:text-xl text-slate-600 dark:text-gray-300 max-w-xl leading-relaxed">
+              Hi, I’m{" "}
+              <span className="font-semibold text-slate-800 dark:text-white">
+                Pranay Dhanke
+              </span>
+              . I design and develop fast, accessible, and production-ready
+              full-stack applications using{" "}
+              <span className="font-semibold text-indigo-600 dark:text-indigo-400">
+                Next.js and the MERN stack
+              </span>
+              .
+            </p>
+
+            {/* CTAs */}
+            <div className="flex flex-wrap items-center gap-4 pt-2">
+              <Link href="#Contact">
+                <motion.button
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-8 py-3.5 font-semibold text-white shadow-md hover:bg-indigo-700 focus-visible:ring-4 focus-visible:ring-indigo-300"
+                >
+                  Get In Touch →
+                </motion.button>
+              </Link>
+
+              <a
+                href="/PranayDhankeResume.pdf"
+                download="Pranay_Dhanke_Resume.pdf"
+              >
+                <motion.button
+                  whileHover={{ scale: 1.02, y: -1 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-8 py-3 text-base font-semibold text-slate-800 hover:bg-slate-50 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:hover:bg-gray-800"
+                >
+                  📥 Download Resume
+                </motion.button>
+              </a>
+
+              <span className="hidden md:inline text-sm text-slate-500 dark:text-gray-400">
+                • Open to internships & full-time roles
+              </span>
+            </div>
+
+            {/* Skills */}
+            <div className="pt-6 border-t border-slate-200 dark:border-gray-800 space-y-4">
+              <p className="text-sm font-semibold uppercase tracking-wider text-slate-500">
+                Tech Stack
+              </p>
+
+              {skills.map((group) => (
+                <div key={group.category}>
+                  <p className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 uppercase mb-2">
+                    {group.category}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {group.items.map((skill) => (
+                      <motion.span
+                        key={skill}
+                        whileHover={{
+                          y: -2,
+                          boxShadow: "0 8px 16px -6px rgba(79, 70, 229, 0.15)",
+                        }}
+                        className="rounded-full bg-indigo-50 px-4 py-2 text-sm font-medium text-indigo-700 border border-indigo-200 dark:bg-indigo-950/30 dark:text-indigo-300 dark:border-indigo-800/40"
+                      >
+                        {skill}
+                      </motion.span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Right Visual */}
+          <motion.div
+            className="md:col-span-5 flex justify-center order-1 md:order-2"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <div className="relative bottom-28 w-80 h-96">
+              <motion.div
+                animate={{ y: [0, -12, 0] }}
+                transition={{ duration: 4, repeat: Infinity }}
+                className="rounded-3xl overflow-hidden shadow-2xl border-4 border-white dark:border-gray-800"
+              >
+                <Image
+                  src={luffy}
+                  alt="My Image"
+                  className="object-cover w-full h-full"
+                  priority
+                />
+              </motion.div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Social Sidebar */}
+        <div className="hidden lg:flex fixed left-6 top-1/2 -translate-y-1/2 flex-col gap-5 z-30">
+          {socialLinks.map((s) => {
+            const Icon = s.icon;
+            return (
+              <a
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={s.label}
+                className={`p-3 rounded-full bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-400 transition hover:scale-110 ${s.color}`}
+              >
+                <Icon />
+              </a>
+            );
+          })}
+        </div>
       </div>
     </section>
   );

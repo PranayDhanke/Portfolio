@@ -1,183 +1,203 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
-import Link from "next/link";
-import { motion, useScroll } from "framer-motion";
+import React, { useEffect, useState, useRef, useCallback } from "react";
+import { motion, useScroll, AnimatePresence } from "framer-motion";
 import { FaBars, FaTimes, FaHome } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
-import { IoIosHelpCircleOutline } from "react-icons/io";
 import { IoCodeWorkingOutline } from "react-icons/io5";
+import { IoIosHelpCircleOutline } from "react-icons/io";
 
-// -----------------------------
-// Replace this with your real resume URL or pass as a prop
-const RESUME_URL = "/resume.pdf"; // <-- change this to your actual CV path
-// -----------------------------
+interface NavLink {
+  href: string;
+  label: string;
+  icon: React.ReactNode;
+}
+
+const navLinks: NavLink[] = [
+  { href: "#Home", label: "Home", icon: <FaHome /> },
+  { href: "#About", label: "About", icon: <CgProfile /> },
+  { href: "#Work", label: "Works", icon: <IoCodeWorkingOutline /> },
+  { href: "#Contact", label: "Contact", icon: <IoIosHelpCircleOutline /> },
+];
 
 export default function Navbar() {
   const { scrollYProgress } = useScroll();
+
+  const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("Home");
+  const [isDownloading, setIsDownloading] = useState(false);
+
   const menuRef = useRef<HTMLDivElement | null>(null);
 
-  const links = [
-    { href: "#Home", label: "Home", icon: <FaHome /> },
-    { href: "#About", label: "About", icon: <CgProfile /> },
-    { href: "#Work", label: "Works", icon: <IoCodeWorkingOutline /> },
-    { href: "#Contact", label: "Contact", icon: <IoIosHelpCircleOutline /> },
-  ];
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
-    // lock scroll when menu is open
-    document.body.style.overflow = isOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isOpen]);
+    const unsub = scrollYProgress.on("change", (v) => setIsScrolled(v > 0.05));
+    return () => unsub();
+  }, [scrollYProgress]);
 
   useEffect(() => {
-    // close on Escape
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setIsOpen(false);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(
+          (e) => e.isIntersecting && setActiveSection(e.target.id)
+        );
+      },
+      { threshold: 0.3 }
+    );
+
+    navLinks.forEach((l) => {
+      const el = document.querySelector(l.href);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
   }, []);
 
-  // close when clicking outside mobile menu (for a11y)
-  useEffect(() => {
-    const onClick = (e: MouseEvent) => {
-      if (!isOpen) return;
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", onClick);
-    return () => document.removeEventListener("mousedown", onClick);
-  }, [isOpen]);
+  const handleNavClick = useCallback((href: string) => {
+    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+    setIsOpen(false);
+  }, []);
+
+  const handleDownloadResume = async () => {
+    setIsDownloading(true);
+    await new Promise((r) => setTimeout(r, 300));
+    const link = document.createElement("a");
+    link.href = "/PranayDhankeResume.pdf";
+    link.download = "Pranay_Dhanke_Resume.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setIsDownloading(false);
+    setIsOpen(false);
+  };
+
+  if (!mounted) return null;
 
   return (
-    <header className="sticky overflow-hidden top-0 z-50 bg-white/90 backdrop-blur-sm shadow-sm">
-      {/* thin progress bar driven by scroll */}
+    <header
+      className={`sticky top-0 z-50 backdrop-blur-xl transition-all ${
+        isScrolled ? "bg-gray-950" : "bg-gray-950"
+      } border-b border-gray-800`}
+    >
+      {/* Scroll Progress */}
       <motion.div
         style={{ scaleX: scrollYProgress }}
-        className="origin-left h-1 bg-gradient-to-r from-sky-500 to-indigo-600"
+        className="h-[2px] bg-gradient-to-r from-indigo-500 to-purple-500 origin-left"
       />
 
-      <nav className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Brand / Logo */}
-          <div className="flex items-center gap-3">
-            <div className="rounded-full bg-gradient-to-br from-indigo-500 to-pink-500 w-10 h-10 flex items-center justify-center text-white font-bold">P</div>
-            <div>
-              <Link href="#Home" className="text-xl font-extrabold tracking-tight text-gray-800">
-                PRANAY
-              </Link>
-              <p className="text-xs text-gray-500 -mt-0.5">Frontend • Next.js • ML</p>
+      <nav className="max-w-7xl mx-auto px-4">
+        <div className="flex h-16 items-center justify-between">
+          {/* Brand */}
+          <button
+            onClick={() => handleNavClick("#Home")}
+            className="flex items-center gap-3"
+          >
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold shadow">
+              P
             </div>
-          </div>
+            <div className="hidden sm:block">
+              <h1 className="text-white font-bold">PRANAY</h1>
+              <p className="text-xs text-gray-400">
+                Full-Stack Developer • Next.js
+              </p>
+            </div>
+          </button>
 
-          {/* Desktop links */}
-          <div className="hidden md:flex md:items-center md:gap-8">
-            <ul className="flex gap-6 items-center">
-              {links.map((l) => (
-                <li key={l.href} className="relative group">
-                  <Link
-                    href={l.href}
-                    className="inline-flex items-center gap-2 text-gray-700 font-medium py-2 px-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300"
-                  >
-                    {l.icon}
-                    <span className="whitespace-nowrap">{l.label}</span>
-                    {/* animated underline */}
-                    <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-indigo-600 transition-all group-hover:w-full" />
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          {/* Desktop Nav (UNCHANGED) */}
+          <div className="hidden md:flex items-center gap-2">
+            {navLinks.map((link) => {
+              const active = activeSection === link.href.replace("#", "");
+              return (
+                <button
+                  key={link.href}
+                  onClick={() => handleNavClick(link.href)}
+                  className={`px-3 py-2 rounded-lg text-sm font-medium transition ${
+                    active
+                      ? "bg-gray-800 text-white"
+                      : "text-gray-300 hover:bg-gray-800"
+                  }`}
+                >
+                  {link.label}
+                </button>
+              );
+            })}
 
-            <a
-              href={RESUME_URL}
-              download
-              className="ml-4 inline-flex items-center rounded-lg border border-indigo-100 px-3 py-1.5 text-sm font-medium shadow-sm bg-white hover:bg-indigo-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300"
-              aria-label="Download CV"
-            >
-              Download CV
-            </a>
-          </div>
-
-          {/* Mobile toggle */}
-          <div className="md:hidden flex items-center">
             <button
-              aria-expanded={isOpen}
-              aria-label={isOpen ? "Close menu" : "Open menu"}
-              onClick={() => setIsOpen((s) => !s)}
-              className="p-2 rounded-md inline-flex items-center justify-center text-gray-700 hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300"
+              onClick={handleDownloadResume}
+              className="ml-2 px-4 py-2 text-sm rounded-lg border border-indigo-500 text-indigo-400 hover:bg-indigo-500 hover:text-white transition"
             >
-              {isOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
+              {isDownloading ? "Downloading…" : "Resume"}
             </button>
           </div>
+
+          {/* Mobile Button */}
+          <button
+            onClick={() => setIsOpen(true)}
+            className="md:hidden p-2 rounded-lg text-gray-300 hover:bg-gray-800"
+          >
+            <FaBars />
+          </button>
         </div>
       </nav>
 
-      {/* Mobile menu + backdrop */}
-      <motion.div
-        initial={false}
-        animate={{ opacity: isOpen ? 1 : 0, pointerEvents: isOpen ? "auto" : "none" }}
-        className="fixed inset-0 z-40"
-        aria-hidden={!isOpen}
-      >
-        {/* backdrop */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isOpen ? 0.45 : 0 }}
-          transition={{ duration: 0.18 }}
-          className="absolute inset-0 bg-black"
-        />
-
-        {/* sliding panel */}
-        <motion.aside
-          ref={menuRef}
-          initial={{ x: "100%" }}
-          animate={{ x: isOpen ? "0%" : "100%" }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="absolute right-0 top-0 w-full max-w-xs h-full bg-white shadow-2xl p-6 overflow-auto"
-          role="dialog"
-          aria-modal="true"
-        >
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h3 className="text-lg font-semibold">Menu</h3>
-              <p className="text-sm text-gray-500">Quick links & actions</p>
-            </div>
-            <button onClick={() => setIsOpen(false)} className="p-2 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300">
-              <FaTimes />
-            </button>
-          </div>
-
-          <nav className="flex flex-col gap-4">
-            {links.map((l) => (
-              <Link
-                key={l.href}
-                href={l.href}
-                onClick={() => setIsOpen(false)}
-                className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300"
-              >
-                <span className="text-lg text-indigo-600">{l.icon}</span>
-                <span className="font-medium text-gray-700">{l.label}</span>
-              </Link>
-            ))}
-
-            <a
-              href={RESUME_URL}
-              download
+      {/* ================= MOBILE MENU FIX ================= */}
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            {/* Overlay */}
+            <motion.div
+              className="fixed inset-0 bg-black/70"
               onClick={() => setIsOpen(false)}
-              className="mt-4 inline-flex items-center justify-center w-full rounded-md border border-indigo-100 px-3 py-2 text-sm font-medium bg-white"
-            >
-              Download CV
-            </a>
-          </nav>
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            />
 
-          <div className="mt-6 text-xs text-gray-400">Tip: press Escape to close the menu.</div>
-        </motion.aside>
-      </motion.div>
+            {/* Drawer */}
+            <motion.aside
+              ref={menuRef}
+              className="fixed right-0 top-0 h-screen w-72 bg-black border-l border-gray-800 shadow-xl"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between p-6 border-b border-gray-800">
+                <span className="text-white font-bold">Menu</span>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="text-gray-400 hover:text-white"
+                >
+                  <FaTimes />
+                </button>
+              </div>
+
+              {/* Links */}
+              <div className="p-6 space-y-4">
+                {navLinks.map((l) => (
+                  <button
+                    key={l.href}
+                    onClick={() => handleNavClick(l.href)}
+                    className="block w-full text-left text-gray-300 hover:text-white"
+                  >
+                    {l.label}
+                  </button>
+                ))}
+
+                <button
+                  onClick={handleDownloadResume}
+                  className="w-full mt-6 rounded-lg border border-indigo-500 py-2 text-indigo-400 hover:bg-indigo-500 hover:text-white transition"
+                >
+                  Download Resume
+                </button>
+              </div>
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

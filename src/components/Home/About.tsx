@@ -3,165 +3,202 @@
 import React from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import luffy from "@/images/home/51rayl0HnRL._AC_UF1000,1000_QL80_.jpg";
+import Link from "next/link";
 
-// Animation Variants for sequential entry
-const contentVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { 
-    opacity: 1, 
-    y: 0, 
-    transition: { 
-      delay: 0.1, 
-      duration: 0.6, 
-      ease: "easeOut",
-      staggerChildren: 0.15 
-    } 
+/* Animation Variants */
+const container = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 },
   },
 };
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+const item = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
 };
 
+interface SkillGroup {
+  title: string;
+  skills: string[];
+}
+
 export default function About() {
-  const skills = [
-    { name: "Next.js", value: 85 },
-    { name: "React", value: 90 },
-    { name: "Tailwind CSS", value: 88 },
-    { name: "Firebase", value: 70 },
-    // Add more relevant skills
-    { name: "TypeScript", value: 75 },
-    { name: "Git / GitHub", value: 95 },
+  const skillGroups: SkillGroup[] = [
+    {
+      title: "Frontend",
+      skills: ["Next.js", "React", "Tailwind CSS", "shadcn/ui"],
+    },
+    {
+      title: "Backend",
+      skills: ["Node.js", "Express.js", "REST APIs", "Socket.IO"],
+    },
+    {
+      title: "Databases",
+      skills: ["MongoDB", "PostgreSQL", "Firebase Firestore"],
+    },
+    {
+      title: "Authentication",
+      skills: ["Clerk Authentication", "Firebase Auth"],
+    },
+    {
+      title: "Payments",
+      skills: ["Razorpay"],
+    },
+    {
+      title: "File & Media Handling",
+      skills: ["ImageKit", "Firebase Storage"],
+    },
+    {
+      title: "Tools & DevOps",
+      skills: ["Git", "GitHub", "Docker", "Postman", "Vercel"],
+    },
+    {
+      title: "Languages",
+      skills: ["JavaScript", "TypeScript", "Java", "Python"],
+    },
   ];
 
   return (
-    // Removed backdrop-blur-sm as it can conflict with complex backgrounds, using clean white
-    <section id="About" className="relative bg-gray-50 py-20 md:py-28"> 
-      <div className="max-w-7xl mx-auto px-6">
-        
+    <section
+      id="About"
+      className="relative overflow-hidden bg-gradient-to-b from-slate-50 to-white
+                 dark:from-gray-900 dark:to-gray-950 py-24 md:py-32"
+      style={{ scrollMarginTop: "4rem" }}
+    >
+      {/* Background glow */}
+      <div className="pointer-events-none absolute -right-1/4 top-1/4 h-[40rem] w-[40rem] rounded-full bg-indigo-100/30 dark:bg-indigo-900/10 blur-[120px]" />
+      <div className="pointer-events-none absolute -left-1/4 bottom-0 h-[35rem] w-[35rem] rounded-full bg-purple-100/30 dark:bg-purple-900/10 blur-[120px]" />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <header className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900">
-            &lt;<span className="text-indigo-600">About Me</span> /&gt;
+        <motion.div
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <h2 className="text-4xl md:text-5xl font-extrabold text-slate-800 dark:text-white">
+            About Me
           </h2>
-          <p className="text-base text-gray-500 mt-2">A quick introduction & my background</p>
-        </header>
+          <p className="mt-4 max-w-2xl mx-auto text-slate-600 dark:text-gray-400 text-lg">
+            Computer Science student focused on building clean, scalable, and
+            real-world web applications.
+          </p>
+        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-center">
-          
-          {/* Portrait */}
+        {/* Main Grid */}
+        <div>
+          {/* Content */}
           <motion.div
-            className="w-full flex justify-center md:justify-start"
-            initial={{ x: -30, opacity: 0 }}
-            whileInView={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.7 }}
-            viewport={{ once: true, amount: 0.5 }}
-          >
-            <div className="w-64 md:w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl ring-4 ring-white transition-transform hover:scale-[1.02] duration-300">
-              <Image 
-                src={luffy} 
-                alt="Pranay Dhanke Portrait" 
-                className="w-full h-full object-cover" 
-                // Set fixed aspect ratio for better layout predictability
-                width={500}
-                height={600}
-              />
-            </div>
-          </motion.div>
-
-          {/* Content Block */}
-          <motion.div
-            className="md:col-span-2 bg-white p-8 rounded-3xl shadow-xl border border-gray-100"
-            variants={contentVariants}
+            className=" space-y-8"
+            variants={container}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
+            viewport={{ once: true }}
           >
-            <motion.div className="flex items-center gap-3" variants={itemVariants}>
-              <span className="px-4 py-1.5 text-sm rounded-full bg-indigo-600/10 text-indigo-700 font-bold border border-indigo-200">
-                Who Am I
-              </span>
+            {/* Intro */}
+            <motion.div
+              variants={item}
+              className="bg-white dark:bg-gray-900 border border-slate-200
+                         dark:border-gray-800 rounded-2xl p-8 shadow-sm"
+            >
+              <h3 className="text-2xl font-bold text-slate-800 dark:text-white mb-4">
+                Hello, I’m Pranay
+              </h3>
+              <p className="text-slate-600 dark:text-gray-300 leading-relaxed">
+                I’m a Computer Science student and Full-Stack Web Developer with
+                hands-on experience building production-ready applications using{" "}
+                <strong>Next.js</strong>, modern backend APIs, real-time
+                features, authentication, and payments. I enjoy solving
+                practical problems and turning ideas into reliable software.
+              </p>
             </motion.div>
 
-            <motion.p
-              className="mt-6 text-gray-800 text-lg leading-relaxed border-b pb-6"
-              variants={itemVariants}
+            {/* Highlights */}
+            <motion.div variants={item} className="space-y-3">
+              {[
+                "Built multiple real-world full-stack projects",
+                "Experience with role-based access & backend workflows",
+                "Open to internships and full-time opportunities",
+              ].map((text) => (
+                <div
+                  key={text}
+                  className="flex items-center gap-3 p-4 rounded-lg
+                             bg-slate-100 dark:bg-gray-800/60"
+                >
+                  <span className="text-indigo-600">✓</span>
+                  <p className="text-slate-700 dark:text-gray-300">{text}</p>
+                </div>
+              ))}
+            </motion.div>
+
+            {/* CTAs */}
+            <motion.div
+              variants={item}
+              className="flex flex-wrap gap-4 pt-6 border-t
+                         border-slate-200 dark:border-gray-800"
             >
-              Hello — I&rsquo;m **Pranay**, a **Computer Science student** specializing in modern front-end development. I thrive on building responsive, accessible, and high-performance applications using **Next.js** and **Tailwind CSS**. Im passionate about turning complex ideas into polished, user-friendly products and am constantly expanding my knowledge in the tech landscape.
-            </motion.p>
+              <Link href="#Contact">
+                <button
+                  className="px-6 py-3 rounded-xl bg-indigo-600
+                                   hover:bg-indigo-700 text-white font-semibold"
+                >
+                  Get in Touch
+                </button>
+              </Link>
 
-            {/* Education & Experience Grid */}
-            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6 border-b pb-6">
-              <motion.div variants={itemVariants}>
-                <h3 className="text-base font-bold text-gray-900 mb-2">🎓 Education</h3>
-                <ul className="space-y-1 text-sm text-gray-700">
-                  <li className="flex items-start">
-                    <span className="mr-2 text-indigo-500">•</span>
-                    <span>Diploma — **Government Polytechnic, Arvi** (Computer Engineering)</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2 text-indigo-500">•</span>
-                    <span>Currently pursuing B.E. — **Sipna College of Engineering, Amravati**</span>
-                  </li>
-                </ul>
-              </motion.div>
-
-              <motion.div variants={itemVariants}>
-                <h3 className="text-base font-bold text-gray-900 mb-2">💼 Experience</h3>
-                <p className="text-sm text-gray-700 leading-snug">
-                  Hands-on experience through internships & college projects, including developing web apps like a **blogger platform**, an **e-panchayat system**, and **SmartAgriWaste**. I am actively seeking opportunities to contribute to real-world, innovative products.
-                </p>
-              </motion.div>
-            </div>
-
-            {/* Skills / Progress Bars */}
-            <div className="mt-6">
-              <motion.h4 className="text-base font-bold text-gray-900 mb-4" variants={itemVariants}>
-                🛠️ Core Skills Proficiency
-              </motion.h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
-                {skills.map((skill, index) => (
-                  <motion.div key={skill.name} variants={itemVariants}>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-700 font-medium">{skill.name}</span>
-                      <span className="text-indigo-600 font-bold">{skill.value}%</span>
-                    </div>
-                    <div className="w-full bg-gray-100 rounded-full h-2.5 mt-1 overflow-hidden">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        // Use a key to ensure animation runs on component load
-                        whileInView={{ width: `${skill.value}%` }} 
-                        transition={{ duration: 0.8, delay: 0.1 + index * 0.05 }} 
-                        viewport={{ once: true }}
-                        className="h-full bg-gradient-to-r from-indigo-500 to-sky-500 rounded-full"
-                      />
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-
-            {/* CTA */}
-            <motion.div className="mt-8 flex flex-wrap items-center gap-4 pt-4 border-t border-gray-100" variants={itemVariants}>
-              <a 
-                href="#Contact" 
-                className="inline-flex items-center px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:bg-indigo-700 transition duration-300"
-              >
-                Get in touch
+              <a href="/PranayDhankeResume.pdf" download>
+                <button
+                  className="px-6 py-3 rounded-xl border border-slate-300
+                                   dark:border-gray-700 bg-white dark:bg-gray-900
+                                   text-slate-800 dark:text-white"
+                >
+                  Download Resume
+                </button>
               </a>
-              <a 
-                href="/resume.pdf" 
-                download 
-                className="inline-flex items-center px-6 py-3 border border-gray-300 text-gray-800 font-semibold rounded-xl bg-white hover:bg-gray-50 transition duration-300"
-              >
-                Download CV
-              </a>
-              <span className="text-sm text-gray-500 ml-2">Available for internships & freelance</span>
             </motion.div>
           </motion.div>
         </div>
+
+        {/* Skills */}
+        <motion.div
+          className="mt-20"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <h3 className="text-3xl font-bold text-center text-slate-800 dark:text-white mb-10">
+            Skills & Tools
+          </h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {skillGroups.map((group) => (
+              <div
+                key={group.title}
+                className="bg-white dark:bg-gray-900 border
+                           border-slate-200 dark:border-gray-800 rounded-xl p-6"
+              >
+                <h4 className="font-semibold text-indigo-600 mb-3">
+                  {group.title}
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {group.skills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="px-3 py-1 rounded-full text-sm
+                                 bg-indigo-50 dark:bg-indigo-950/40
+                                 text-indigo-700 dark:text-indigo-300"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </section>
   );

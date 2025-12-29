@@ -1,139 +1,273 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { FaExternalLinkAlt, FaCode } from "react-icons/fa"; // Added icons for CTAs
+import { FaExternalLinkAlt, FaGithub } from "react-icons/fa";
+
 import blogimage from "@/images/work/bloggerapp.png";
 import egram from "@/images/work/egram.png";
 import weatherw from "@/images/work/weatherweb.png";
+import agriwaste from "@/images/work/agriwaste.png";
+import sbp from "@/images/work/plat.png";
 
-const projects = [
+interface Project {
+  id: string;
+  title: string;
+  desc: string;
+  image: any;
+  link: string;
+  codeLink: string;
+  tech: string[];
+  highlights?: string[];
+  year?: string;
+}
+
+const projects: Project[] = [
   {
-    title: "Blogger Website",
-    desc: "A full-stack blogging platform where users can write, publish, and browse blogs with a clean UI. Features secure authentication and database integration.",
-    image: blogimage,
-    link: "https://blogger-blue-ten.vercel.app/",
-    codeLink: "#", // Add your GitHub link here
-    tech: ["Next.js", "MongoDB", "Firebase Auth", "Tailwind CSS"],
+    id: "agriwaste",
+    title: "Smart Agri Waste Management Platform",
+    desc: "A full-stack agri-tech platform enabling farmers and buyers to manage agricultural waste, negotiate prices, place orders, and track workflows in real time.",
+    image: agriwaste,
+    link: "https://smart-agriwaste.vercel.app",
+    codeLink: "https://github.com/PranayDhanke/Smart-Agriwaste.git",
+    tech: [
+      "Next.js",
+      "Node.js",
+      "Express.js",
+      "MongoDB",
+      "Clerk",
+      "Razorpay",
+      "ImageKit",
+    ],
+    highlights: [
+      "Role-based access",
+      "Real-time negotiation",
+      "Payment integration",
+    ],
+    year: "2025",
   },
   {
-    title: "E-Gram Website",
-    desc: "Digital portal for Gram Panchayat allowing officers to manage schemes and villagers to submit applications online. Improves accessibility and transparency.",
+    id: "sbp",
+    title: "Farmer Product Selling Platform",
+    desc: "An e-commerce platform where farmers list products and buyers can purchase or negotiate prices directly, promoting fair pricing and transparency.",
+    image: sbp,
+    link: "https://agrocart-ten.vercel.app/",
+    codeLink: "https://github.com/PranayDhanke/farmer-buyer-platfom.git",
+    tech: ["Next.js", "Tailwind CSS", "Supabase", "PostgreSQL"],
+    year: "2025",
+  },
+  {
+    id: "egram",
+    title: "E-Gram Panchayat Portal",
+    desc: "A digital governance platform for village-level schemes with online applications, verification workflows, and real-time status updates.",
     image: egram,
     link: "https://e-gram.vercel.app/",
-    codeLink: "#", // Add your GitHub link here
-    tech: ["Next.js", "Firebase", "Realtime DB", "ShadCN UI"],
+    codeLink: "https://github.com/PranayDhanke/e-panchayat.git",
+    tech: ["Next.js", "Firebase Auth", "Firestore", "Firebase Storage"],
+    year: "2024",
   },
   {
-    title: "Weather App",
-    desc: "A responsive weather application providing real-time temperature, conditions, and forecasts for any global city using the OpenWeatherMap API.",
+    id: "blogger",
+    title: "Blogger Platform",
+    desc: "A full-stack blogging platform with authentication, CRUD operations, and a clean interface for reading and publishing content.",
+    image: blogimage,
+    link: "https://blogger-blue-ten.vercel.app/",
+    codeLink: "https://github.com/PranayDhanke/blogger.git",
+    tech: ["Next.js", "Firebase Firestore", "Firebase Auth"],
+    year: "2023",
+  },
+  {
+    id: "weather",
+    title: "Weather Application",
+    desc: "A responsive weather application providing real-time weather data and forecasts using the OpenWeather API.",
     image: weatherw,
     link: "https://whetherapp-three.vercel.app/",
-    codeLink: "#", // Add your GitHub link here
-    tech: ["React", "Weather API", "Tailwind CSS"],
+    codeLink: "https://github.com/PranayDhanke/simpleweather.git",
+    tech: ["React", "OpenWeather API", "Tailwind CSS"],
+    year: "2024",
   },
 ];
 
+// Animation Variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.12 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+};
+
 export default function Work() {
   return (
-    <section id="Work" className="py-24 bg-white"> 
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Heading */}
-        <motion.h2
-          initial={{ opacity: 0, y: -20 }}
+    <section
+      id="Work"
+      className="relative overflow-hidden bg-gradient-to-b from-slate-50 to-white
+                 dark:from-gray-950 dark:to-gray-900 py-24 md:py-32"
+      style={{ scrollMarginTop: "4rem" }}
+    >
+      {/* Decorative backgrounds */}
+      <div className="pointer-events-none absolute -right-1/4 -top-1/4 h-[45rem] w-[45rem] rounded-full bg-indigo-100/30 dark:bg-indigo-900/10 blur-[120px]" />
+      <div className="pointer-events-none absolute -left-1/4 bottom-0 h-[40rem] w-[40rem] rounded-full bg-purple-100/30 dark:bg-purple-900/10 blur-[120px]" />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <motion.div
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="text-center text-4xl md:text-5xl font-extrabold text-gray-900 mb-4"
+          transition={{ duration: 0.6 }}
         >
-          &lt;<span className="text-indigo-600">My Works</span> /&gt;
-        </motion.h2>
-        <p className="text-center text-lg text-gray-500 mb-16">
-          Explore a selection of my recent front-end development projects.
-        </p>
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-slate-800 dark:text-white">
+            My Projects
+          </h2>
+          <p className="mt-4 max-w-2xl mx-auto text-lg text-slate-600 dark:text-gray-400">
+            A collection of my Best real-world projects built with modern full-stack
+            technologies.
+          </p>
+        </motion.div>
 
         {/* Projects Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-          {projects.map((p, i) => (
-            <motion.div
-              key={p.title}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: i * 0.15 }} // Adjusted delay for smoother stagger
-              viewport={{ once: true, amount: 0.2 }}
-              className="group bg-gray-50 rounded-2xl shadow-xl transition-all duration-300 hover:shadow-2xl hover:border-indigo-300 border border-gray-100 overflow-hidden flex flex-col"
-            >
-              
-              {/* Image */}
-              <div className="w-full h-52 overflow-hidden relative">
-                <Image
-                  src={p.image}
-                  alt={p.title}
-                  // Added placeholder for better loading UX
-                  placeholder="blur" 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                />
-                {/* Overlay for professionalism */}
-                <div className="absolute inset-0 bg-indigo-600/5 opacity-0 group-hover:opacity-10 transition-opacity"></div>
-              </div>
-
-              {/* Content */}
-              <div className="p-6 flex flex-col flex-grow">
-                <h3 className="text-2xl font-bold text-gray-900">{p.title}</h3>
-                <p className="mt-3 text-gray-600 flex-grow text-base">{p.desc}</p>
-
-                {/* Tech badges */}
-                <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-gray-100">
-                  {p.tech.map((t) => (
-                    <span
-                      key={t}
-                      className="text-xs px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full font-medium"
-                    >
-                      {t}
-                    </span>
-                  ))}
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+        >
+          <AnimatePresence>
+            {projects.map((project) => (
+              <motion.div
+                key={project.id}
+                variants={itemVariants}
+                className="group relative overflow-hidden rounded-2xl bg-white
+                           dark:bg-gray-900 border border-slate-200
+                           dark:border-gray-800 shadow-md hover:shadow-xl
+                           transition-all flex flex-col"
+              >
+                {/* Image */}
+                <div className="relative h-56 overflow-hidden">
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    className="object-cover transition-transform duration-300
+                               group-hover:scale-105"
+                  />
                 </div>
 
-                {/* Buttons */}
-                <div className="mt-6 flex flex-wrap gap-3">
-                  {/* Visit Project Button */}
-                  <Link
-                    href={p.link}
-                    target="_blank"
-                    className="flex-1 inline-flex justify-center items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition duration-300 shadow-md shadow-indigo-200"
-                  >
-                    <FaExternalLinkAlt className="text-sm"/>
-                    Live Demo
-                  </Link>
+                {/* Content */}
+                <div className="p-6 flex flex-col flex-grow">
+                  <h3 className="text-xl font-bold text-slate-800 dark:text-white">
+                    {project.title}
+                  </h3>
 
-                  {/* View Code Button (Conditional) */}
-                  {p.codeLink && p.codeLink !== '#' && (
+                  <p className="mt-3 text-sm text-slate-600 dark:text-gray-400 leading-relaxed flex-grow">
+                    {project.desc}
+                  </p>
+
+                  {/* Tech */}
+                  <div className="mt-4 pt-4 border-t border-slate-200 dark:border-gray-800">
+                    <div className="flex flex-wrap gap-2">
+                      {project.tech.map((tech) => (
+                        <span
+                          key={tech}
+                          className="text-xs font-medium px-3 py-1 rounded-full
+                                     bg-indigo-50 dark:bg-indigo-950/40
+                                     text-indigo-700 dark:text-indigo-300
+                                     border border-indigo-200 dark:border-indigo-800/50"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="mt-6 flex gap-3">
                     <Link
-                      href={p.codeLink}
+                      href={project.link}
                       target="_blank"
-                      className="flex-1 inline-flex justify-center items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-300 text-gray-800 font-semibold bg-white hover:bg-gray-100 transition duration-300"
+                      className="flex-1"
                     >
-                      <FaCode className="text-sm"/>
-                      View Code
+                      <button
+                        className="w-full inline-flex justify-center
+                                         items-center gap-2 px-4 py-2.5
+                                         rounded-lg bg-indigo-600 hover:bg-indigo-700
+                                         text-white font-semibold"
+                      >
+                        <FaExternalLinkAlt />
+                        Live
+                      </button>
                     </Link>
-                  )}
-                  {/* Fallback link if no code link is available */}
-                  {p.codeLink === '#' && (
-                    <button
-                        disabled
-                        className="flex-1 inline-flex justify-center items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 text-gray-400 bg-white cursor-not-allowed"
+
+                    <Link
+                      href={project.codeLink}
+                      target="_blank"
+                      className="flex-1"
                     >
-                        <FaCode className="text-sm"/>
-                        Code Private
-                    </button>
+                      <button
+                        className="w-full inline-flex justify-center
+                                         items-center gap-2 px-4 py-2.5
+                                         rounded-lg border border-slate-300
+                                         dark:border-gray-700 text-slate-800
+                                         dark:text-white bg-white dark:bg-gray-900
+                                         hover:border-indigo-600 dark:hover:border-indigo-500"
+                      >
+                        <FaGithub />
+                        Code
+                      </button>
+                    </Link>
+                  </div>
+
+                  {project.year && (
+                    <p className="mt-4 text-xs text-center text-slate-500">
+                      {project.year}
+                    </p>
                   )}
                 </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+
+                {/* Hover Border */}
+                <div
+                  className="absolute inset-0 rounded-2xl border-2
+                                border-transparent group-hover:border-indigo-500
+                                transition-colors pointer-events-none"
+                />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
+
+        {/* CTA */}
+        <motion.div
+          className="mt-20 text-center"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <p className="text-slate-600 dark:text-gray-400 mb-6">
+            Interested in collaborating or discussing projects?
+          </p>
+          <Link href="#Contact">
+            <button
+              className="px-8 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700
+                               text-white font-semibold"
+            >
+              Let’s Talk →
+            </button>
+          </Link>
+        </motion.div>
       </div>
     </section>
   );
