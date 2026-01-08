@@ -149,7 +149,7 @@ export default function About() {
                 </button>
               </Link>
 
-              <a href="/PranayDhankeResume.pdf" download>
+              <a href="/resume.pdf" download>
                 <button
                   className="px-6 py-3 rounded-xl border border-slate-300
                                    dark:border-gray-700 bg-white dark:bg-gray-900

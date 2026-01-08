@@ -115,7 +115,7 @@ export default function Home() {
               </Link>
 
               <a
-                href="/PranayDhankeResume.pdf"
+                href="/resume.pdf"
                 download="Pranay_Dhanke_Resume.pdf"
               >
                 <motion.button

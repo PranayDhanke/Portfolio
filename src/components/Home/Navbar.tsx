@@ -65,7 +65,7 @@ export default function Navbar() {
     setIsDownloading(true);
     await new Promise((r) => setTimeout(r, 300));
     const link = document.createElement("a");
-    link.href = "/PranayDhankeResume.pdf";
+    link.href = "/resume.pdf";
     link.download = "Pranay_Dhanke_Resume.pdf";
     document.body.appendChild(link);
     link.click();
