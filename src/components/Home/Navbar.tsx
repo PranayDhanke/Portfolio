@@ -1,75 +1,73 @@
 "use client";
 
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, useScroll, AnimatePresence } from "framer-motion";
-import { FaBars, FaTimes, FaHome } from "react-icons/fa";
-import { CgProfile } from "react-icons/cg";
-import { IoCodeWorkingOutline } from "react-icons/io5";
-import { IoIosHelpCircleOutline } from "react-icons/io";
+import { FaBars, FaTimes } from "react-icons/fa";
+import { portfolio } from "@/data/portfolio";
 
 interface NavLink {
   href: string;
   label: string;
-  icon: React.ReactNode;
 }
 
 const navLinks: NavLink[] = [
-  { href: "#Home", label: "Home", icon: <FaHome /> },
-  { href: "#About", label: "About", icon: <CgProfile /> },
-  { href: "#Work", label: "Works", icon: <IoCodeWorkingOutline /> },
-  { href: "#Contact", label: "Contact", icon: <IoIosHelpCircleOutline /> },
+  { href: "#Home", label: "Home" },
+  { href: "#About", label: "About" },
+  { href: "#Work", label: "Projects" },
+  { href: "#Contact", label: "Contact" },
 ];
 
 export default function Navbar() {
   const { scrollYProgress } = useScroll();
-
   const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("Home");
   const [isDownloading, setIsDownloading] = useState(false);
 
-  const menuRef = useRef<HTMLDivElement | null>(null);
-
   useEffect(() => setMounted(true), []);
 
   useEffect(() => {
-    const unsub = scrollYProgress.on("change", (v) => setIsScrolled(v > 0.05));
+    const unsub = scrollYProgress.on("change", (v) => setIsScrolled(v > 0.04));
     return () => unsub();
   }, [scrollYProgress]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach(
-          (e) => e.isIntersecting && setActiveSection(e.target.id)
-        );
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
       },
-      { threshold: 0.3 }
+      { threshold: 0.35 }
     );
 
-    navLinks.forEach((l) => {
-      const el = document.querySelector(l.href);
+    navLinks.forEach((link) => {
+      const el = document.querySelector(link.href);
       if (el) observer.observe(el);
     });
 
     return () => observer.disconnect();
   }, []);
 
-  const handleNavClick = useCallback((href: string) => {
+  const handleNavClick = (href: string) => {
     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
     setIsOpen(false);
-  }, []);
+  };
 
   const handleDownloadResume = async () => {
     setIsDownloading(true);
-    await new Promise((r) => setTimeout(r, 300));
+    await new Promise((resolve) => setTimeout(resolve, 250));
+
     const link = document.createElement("a");
-    link.href = "/resume.pdf";
-    link.download = "Pranay_Dhanke_Resume.pdf";
+    link.href = portfolio.resumeHref;
+    link.download = portfolio.resumeDownloadName;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+
     setIsDownloading(false);
     setIsOpen(false);
   };
@@ -78,46 +76,43 @@ export default function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-50 backdrop-blur-xl transition-all ${
-        isScrolled ? "bg-gray-950" : "bg-gray-950"
-      } border-b border-gray-800`}
+      className={`sticky top-0 z-50 border-b transition-all ${
+        isScrolled
+          ? "border-slate-200 bg-white/85 shadow-sm backdrop-blur-xl"
+          : "border-transparent bg-white/70 backdrop-blur-md"
+      }`}
     >
-      {/* Scroll Progress */}
       <motion.div
         style={{ scaleX: scrollYProgress }}
-        className="h-[2px] bg-gradient-to-r from-indigo-500 to-purple-500 origin-left"
+        className="h-[2px] origin-left bg-gradient-to-r from-teal-500 via-cyan-500 to-amber-500"
       />
 
-      <nav className="max-w-7xl mx-auto px-4">
+      <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          {/* Brand */}
           <button
             onClick={() => handleNavClick("#Home")}
             className="flex items-center gap-3"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold shadow">
-              P
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-950 font-bold text-white shadow-lg shadow-slate-900/10">
+              {portfolio.initial}
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-white font-bold">PRANAY</h1>
-              <p className="text-xs text-gray-400">
-                Full-Stack Developer • Next.js
-              </p>
+              <h1 className="font-bold text-slate-900">{portfolio.name}</h1>
+              <p className="text-xs text-slate-500">{portfolio.shortRole}</p>
             </div>
           </button>
 
-          {/* Desktop Nav (UNCHANGED) */}
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden items-center gap-2 md:flex">
             {navLinks.map((link) => {
               const active = activeSection === link.href.replace("#", "");
               return (
                 <button
                   key={link.href}
                   onClick={() => handleNavClick(link.href)}
-                  className={`px-3 py-2 rounded-lg text-sm font-medium transition ${
+                  className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                     active
-                      ? "bg-gray-800 text-white"
-                      : "text-gray-300 hover:bg-gray-800"
+                      ? "bg-slate-950 text-white"
+                      : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
                   }`}
                 >
                   {link.label}
@@ -127,69 +122,67 @@ export default function Navbar() {
 
             <button
               onClick={handleDownloadResume}
-              className="ml-2 px-4 py-2 text-sm rounded-lg border border-indigo-500 text-indigo-400 hover:bg-indigo-500 hover:text-white transition"
+              className="ml-2 rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-800 transition hover:border-teal-500 hover:text-teal-700"
             >
-              {isDownloading ? "Downloading…" : "Resume"}
+              {isDownloading ? "Downloading..." : "Resume"}
             </button>
           </div>
 
-          {/* Mobile Button */}
           <button
             onClick={() => setIsOpen(true)}
-            className="md:hidden p-2 rounded-lg text-gray-300 hover:bg-gray-800"
+            className="rounded-lg p-2 text-slate-700 hover:bg-slate-100 md:hidden"
+            aria-label="Open menu"
           >
             <FaBars />
           </button>
         </div>
       </nav>
 
-      {/* ================= MOBILE MENU FIX ================= */}
       <AnimatePresence>
         {isOpen && (
           <>
-            {/* Overlay */}
             <motion.div
-              className="fixed inset-0 bg-black/70"
+              className="fixed inset-0 bg-slate-950/60"
               onClick={() => setIsOpen(false)}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             />
 
-            {/* Drawer */}
             <motion.aside
-              ref={menuRef}
-              className="fixed right-0 top-0 h-screen w-72 bg-black border-l border-gray-800 shadow-xl"
+              className="fixed right-0 top-0 h-screen w-72 border-l border-slate-200 bg-white shadow-xl"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
             >
-              {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-gray-800">
-                <span className="text-white font-bold">Menu</span>
+              <div className="flex items-center justify-between border-b border-slate-200 p-6">
+                <div>
+                  <p className="font-bold text-slate-900">{portfolio.name}</p>
+                  <p className="text-sm text-slate-500">{portfolio.role}</p>
+                </div>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="text-gray-400 hover:text-white"
+                  className="text-slate-500 hover:text-slate-900"
+                  aria-label="Close menu"
                 >
                   <FaTimes />
                 </button>
               </div>
 
-              {/* Links */}
-              <div className="p-6 space-y-4">
-                {navLinks.map((l) => (
+              <div className="space-y-4 p-6">
+                {navLinks.map((link) => (
                   <button
-                    key={l.href}
-                    onClick={() => handleNavClick(l.href)}
-                    className="block w-full text-left text-gray-300 hover:text-white"
+                    key={link.href}
+                    onClick={() => handleNavClick(link.href)}
+                    className="block w-full rounded-xl px-4 py-3 text-left text-slate-700 transition hover:bg-slate-100 hover:text-slate-950"
                   >
-                    {l.label}
+                    {link.label}
                   </button>
                 ))}
 
                 <button
                   onClick={handleDownloadResume}
-                  className="w-full mt-6 rounded-lg border border-indigo-500 py-2 text-indigo-400 hover:bg-indigo-500 hover:text-white transition"
+                  className="mt-4 w-full rounded-xl bg-teal-600 py-3 font-semibold text-white transition hover:bg-teal-700"
                 >
                   Download Resume
                 </button>

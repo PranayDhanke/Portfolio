@@ -1,96 +1,11 @@
 "use client";
 
-import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { FaExternalLinkAlt, FaGithub } from "react-icons/fa";
+import { portfolio } from "@/data/portfolio";
 
-import blogimage from "@/images/work/bloggerapp.png";
-import egram from "@/images/work/egram.png";
-import weatherw from "@/images/work/weatherweb.png";
-import agriwaste from "@/images/work/agriwaste.png";
-import sbp from "@/images/work/plat.png";
-
-interface Project {
-  id: string;
-  title: string;
-  desc: string;
-  image: any;
-  link: string;
-  codeLink: string;
-  tech: string[];
-  highlights?: string[];
-  year?: string;
-}
-
-const projects: Project[] = [
-  {
-    id: "agriwaste",
-    title: "Smart Agri Waste Management Platform",
-    desc: "A full-stack agri-tech platform enabling farmers and buyers to manage agricultural waste, negotiate prices, place orders, and track workflows in real time.",
-    image: agriwaste,
-    link: "https://smart-agriwaste.vercel.app",
-    codeLink: "https://github.com/PranayDhanke/Smart-Agriwaste.git",
-    tech: [
-      "Next.js",
-      "Node.js",
-      "Express.js",
-      "MongoDB",
-      "Clerk",
-      "Razorpay",
-      "ImageKit",
-    ],
-    highlights: [
-      "Role-based access",
-      "Real-time negotiation",
-      "Payment integration",
-    ],
-    year: "2025",
-  },
-  {
-    id: "sbp",
-    title: "Farmer Product Selling Platform",
-    desc: "An e-commerce platform where farmers list products and buyers can purchase or negotiate prices directly, promoting fair pricing and transparency.",
-    image: sbp,
-    link: "https://agrocart-ten.vercel.app/",
-    codeLink: "https://github.com/PranayDhanke/farmer-buyer-platfom.git",
-    tech: ["Next.js", "Tailwind CSS", "Supabase", "PostgreSQL"],
-    year: "2025",
-  },
-  {
-    id: "egram",
-    title: "E-Gram Panchayat Portal",
-    desc: "A digital governance platform for village-level schemes with online applications, verification workflows, and real-time status updates.",
-    image: egram,
-    link: "https://e-gram.vercel.app/",
-    codeLink: "https://github.com/PranayDhanke/e-panchayat.git",
-    tech: ["Next.js", "Firebase Auth", "Firestore", "Firebase Storage"],
-    year: "2024",
-  },
-  {
-    id: "blogger",
-    title: "Blogger Platform",
-    desc: "A full-stack blogging platform with authentication, CRUD operations, and a clean interface for reading and publishing content.",
-    image: blogimage,
-    link: "https://blogger-blue-ten.vercel.app/",
-    codeLink: "https://github.com/PranayDhanke/blogger.git",
-    tech: ["Next.js", "Firebase Firestore", "Firebase Auth"],
-    year: "2023",
-  },
-  {
-    id: "weather",
-    title: "Weather Application",
-    desc: "A responsive weather application providing real-time weather data and forecasts using the OpenWeather API.",
-    image: weatherw,
-    link: "https://whetherapp-three.vercel.app/",
-    codeLink: "https://github.com/PranayDhanke/simpleweather.git",
-    tech: ["React", "OpenWeather API", "Tailwind CSS"],
-    year: "2024",
-  },
-];
-
-// Animation Variants
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -112,160 +27,154 @@ export default function Work() {
   return (
     <section
       id="Work"
-      className="relative overflow-hidden bg-gradient-to-b from-slate-50 to-white
-                 dark:from-gray-950 dark:to-gray-900 py-24 md:py-32"
+      className="relative overflow-hidden bg-[linear-gradient(180deg,_#f8fafc_0%,_#ffffff_35%,_#fffbeb_100%)] py-24 md:py-32"
       style={{ scrollMarginTop: "4rem" }}
     >
-      {/* Decorative backgrounds */}
-      <div className="pointer-events-none absolute -right-1/4 -top-1/4 h-[45rem] w-[45rem] rounded-full bg-indigo-100/30 dark:bg-indigo-900/10 blur-[120px]" />
-      <div className="pointer-events-none absolute -left-1/4 bottom-0 h-[40rem] w-[40rem] rounded-full bg-purple-100/30 dark:bg-purple-900/10 blur-[120px]" />
+      <div className="pointer-events-none absolute -right-16 top-0 h-96 w-96 rounded-full bg-cyan-200/25 blur-3xl" />
+      <div className="pointer-events-none absolute -left-16 bottom-0 h-96 w-96 rounded-full bg-amber-200/25 blur-3xl" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
-          className="text-center mb-16"
+          className="mb-16 text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-slate-800 dark:text-white">
-            My Projects
+          <p className="text-sm font-semibold uppercase tracking-[0.35em] text-teal-700">
+            Portfolio
+          </p>
+          <h2 className="mt-4 text-4xl font-black text-slate-900 sm:text-5xl md:text-6xl">
+            Selected Projects
           </h2>
-          <p className="mt-4 max-w-2xl mx-auto text-lg text-slate-600 dark:text-gray-400">
-            A collection of my Best real-world projects built with modern full-stack
-            technologies.
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600">
+            A mix of full-stack products and backend-focused builds that reflect
+            how I approach practical software problems.
           </p>
         </motion.div>
 
-        {/* Projects Grid */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
-          <AnimatePresence>
-            {projects.map((project) => (
-              <motion.div
-                key={project.id}
-                variants={itemVariants}
-                className="group relative overflow-hidden rounded-2xl bg-white
-                           dark:bg-gray-900 border border-slate-200
-                           dark:border-gray-800 shadow-md hover:shadow-xl
-                           transition-all flex flex-col"
-              >
-                {/* Image */}
-                <div className="relative h-56 overflow-hidden">
+          {portfolio.projects.map((project) => (
+            <motion.article
+              key={project.id}
+              variants={itemVariants}
+              className="group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+            >
+              <div className="relative h-56 overflow-hidden">
+                {project.image ? (
                   <Image
                     src={project.image}
                     alt={project.title}
                     fill
-                    className="object-cover transition-transform duration-300
-                               group-hover:scale-105"
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />
-                </div>
-
-                {/* Content */}
-                <div className="p-6 flex flex-col flex-grow">
-                  <h3 className="text-xl font-bold text-slate-800 dark:text-white">
-                    {project.title}
-                  </h3>
-
-                  <p className="mt-3 text-sm text-slate-600 dark:text-gray-400 leading-relaxed flex-grow">
-                    {project.desc}
-                  </p>
-
-                  {/* Tech */}
-                  <div className="mt-4 pt-4 border-t border-slate-200 dark:border-gray-800">
-                    <div className="flex flex-wrap gap-2">
-                      {project.tech.map((tech) => (
-                        <span
-                          key={tech}
-                          className="text-xs font-medium px-3 py-1 rounded-full
-                                     bg-indigo-50 dark:bg-indigo-950/40
-                                     text-indigo-700 dark:text-indigo-300
-                                     border border-indigo-200 dark:border-indigo-800/50"
-                        >
-                          {tech}
-                        </span>
-                      ))}
+                ) : (
+                  <div className="flex h-full items-end bg-[linear-gradient(135deg,_#0f172a_0%,_#115e59_60%,_#f59e0b_100%)] p-6">
+                    <div className="max-w-[14rem]">
+                      <p className="text-sm font-semibold uppercase tracking-[0.25em] text-teal-100">
+                        Systems Project
+                      </p>
+                      <h3 className="mt-3 text-2xl font-bold text-white">
+                        {project.title}
+                      </h3>
                     </div>
                   </div>
+                )}
+              </div>
 
-                  {/* Actions */}
-                  <div className="mt-6 flex gap-3">
-                    <Link
-                      href={project.link}
-                      target="_blank"
-                      className="flex-1"
-                    >
-                      <button
-                        className="w-full inline-flex justify-center
-                                         items-center gap-2 px-4 py-2.5
-                                         rounded-lg bg-indigo-600 hover:bg-indigo-700
-                                         text-white font-semibold"
-                      >
-                        <FaExternalLinkAlt />
-                        Live
-                      </button>
-                    </Link>
-
-                    <Link
-                      href={project.codeLink}
-                      target="_blank"
-                      className="flex-1"
-                    >
-                      <button
-                        className="w-full inline-flex justify-center
-                                         items-center gap-2 px-4 py-2.5
-                                         rounded-lg border border-slate-300
-                                         dark:border-gray-700 text-slate-800
-                                         dark:text-white bg-white dark:bg-gray-900
-                                         hover:border-indigo-600 dark:hover:border-indigo-500"
-                      >
-                        <FaGithub />
-                        Code
-                      </button>
-                    </Link>
-                  </div>
-
-                  {project.year && (
-                    <p className="mt-4 text-xs text-center text-slate-500">
+              <div className="flex flex-1 flex-col p-6">
+                <div className="flex items-start justify-between gap-3">
+                  <h3 className="text-xl font-bold text-slate-900">{project.title}</h3>
+                  {project.year ? (
+                    <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-500">
                       {project.year}
-                    </p>
-                  )}
+                    </span>
+                  ) : null}
                 </div>
 
-                {/* Hover Border */}
-                <div
-                  className="absolute inset-0 rounded-2xl border-2
-                                border-transparent group-hover:border-indigo-500
-                                transition-colors pointer-events-none"
-                />
-              </motion.div>
-            ))}
-          </AnimatePresence>
+                <p className="mt-3 flex-grow text-sm leading-7 text-slate-600">
+                  {project.desc}
+                </p>
+
+                {project.highlights?.length ? (
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {project.highlights.map((highlight) => (
+                      <span
+                        key={highlight}
+                        className="rounded-full bg-teal-50 px-3 py-1 text-xs font-semibold text-teal-700"
+                      >
+                        {highlight}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
+
+                <div className="mt-5 border-t border-slate-200 pt-4">
+                  <div className="flex flex-wrap gap-2">
+                    {project.tech.map((tech) => (
+                      <span
+                        key={tech}
+                        className="rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-700"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="mt-6 flex gap-3">
+                  {project.link ? (
+                    <Link href={project.link} target="_blank" className="flex-1">
+                      <span className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-slate-950 px-4 py-3 font-semibold text-white">
+                        <FaExternalLinkAlt />
+                        Live
+                      </span>
+                    </Link>
+                  ) : (
+                    <span className="inline-flex flex-1 items-center justify-center rounded-xl border border-dashed border-slate-300 px-4 py-3 text-sm font-medium text-slate-400">
+                      Code-only project
+                    </span>
+                  )}
+
+                  {project.codeLink ? (
+                    <Link href={project.codeLink} target="_blank" className="flex-1">
+                      <span className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-300 px-4 py-3 font-semibold text-slate-800 transition hover:border-teal-500 hover:text-teal-700">
+                        <FaGithub />
+                        Code
+                      </span>
+                    </Link>
+                  ) : (
+                    <span className="inline-flex flex-1 items-center justify-center rounded-xl border border-dashed border-slate-300 px-4 py-3 text-sm font-medium text-slate-400">
+                      Repo link pending
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className="pointer-events-none absolute inset-0 rounded-[1.75rem] border border-transparent transition group-hover:border-teal-400/50" />
+            </motion.article>
+          ))}
         </motion.div>
 
-        {/* CTA */}
         <motion.div
           className="mt-20 text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <p className="text-slate-600 dark:text-gray-400 mb-6">
-            Interested in collaborating or discussing projects?
+          <p className="mb-6 text-slate-600">
+            Interested in collaborating or discussing any of these builds?
           </p>
           <Link href="#Contact">
-            <button
-              className="px-8 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700
-                               text-white font-semibold"
-            >
-              Let’s Talk →
-            </button>
+            <span className="inline-flex rounded-xl bg-teal-600 px-8 py-3 font-semibold text-white shadow-lg shadow-teal-600/20 transition hover:bg-teal-700">
+              Let’s Talk
+            </span>
           </Link>
         </motion.div>
       </div>
