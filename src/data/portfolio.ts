@@ -211,6 +211,32 @@ export const portfolio = {
   ] satisfies Education[],
   projects: [
     {
+      id: "e-editor",
+      title: "E-Editor - Real-Time Collaborative Code Editor",
+      desc: "A scalable collaborative IDE built for multi-user coding sessions with conflict-free editing, live presence, integrated communication, and secure containerized code execution.",
+      tech: [
+        "Next.js",
+        "TypeScript",
+        "Express.js",
+        "Socket.IO",
+        "WebRTC",
+        "Yjs",
+        "Monaco Editor",
+        "Redis",
+        "MongoDB",
+        "Clerk",
+        "BullMQ",
+        "Docker",
+      ],
+      highlights: [
+        "Conflict-free real-time editing with Yjs CRDTs",
+        "Live sync, presence, chat, and audio/video collaboration",
+        "Sandboxed code execution in isolated Docker containers",
+      ],
+      year: "2026",
+      codeLink: "https://github.com/PranayDhanke/e-edito.git",
+    },
+    {
       id: "event-driven-order-management-system",
       title: "Event-Driven Order Management System",
       desc: "A distributed order processing system built with Go, Gin, RabbitMQ, PostgreSQL, Redis, and Docker, designed around asynchronous service communication and backend reliability patterns.",
